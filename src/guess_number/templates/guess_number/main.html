@@ -5,8 +5,26 @@
     <title>Guess it is number</title>
 </head>
 <body>
-    sdfgsdfg
-    sdfffffffffffffffffffg
-    sdfffffffffffffffffffffffffg
+    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column">
+        <div style="margin: 100px 0 0 0">
+            <form method="get" action="{% url 'main' %}">
+                <label>
+                    <span style="font-size: 22px">
+                        Введите двухзначное число<br/>
+                    </span>
+                </label>
+                <input type="number" value="00" name="number_user">
+                <button>
+                    Начать отгадывание
+                </button>
+            </form>
+        </div>
+
+        <div style="margin: 40px 0 0 0">
+            <h3>
+                Догадки экстрасенсов:
+            </h3>
+        </div>
+    </div>
 </body>
 </html>
