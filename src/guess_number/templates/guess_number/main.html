@@ -5,15 +5,15 @@
     <title>Guess it is number</title>
 </head>
 <body>
-    <div style="display: flex; align-items: center; justify-content: center; flex-direction: column">
+    <div style="display: flex; align-items: start; justify-content: center; flex-direction: column; margin: 0 0 0 500px">
         <div style="margin: 100px 0 0 0">
-            <form method="get" action="{% url 'main' %}">
+            <form method="get" action="{% url 'assessment' %}">
                 <label>
                     <span style="font-size: 22px">
                         Введите двухзначное число<br/>
                     </span>
                 </label>
-                <input type="number" value="00" name="number_user">
+                <input type="number" value="0" name="number_user">
                 <button>
                     Начать отгадывание
                 </button>
@@ -24,6 +24,53 @@
             <h3>
                 Догадки экстрасенсов:
             </h3>
+        </div>
+
+        <div style="margin: 40px 0 0 0">
+            <h3>
+                История догадок каждого экстрасенса:
+            </h3>
+            {% for psychic in psychics %}
+                {% if psychic.assumptions %}
+                    <div>
+                        <h5>
+                            {{ psychic.name }}
+                        </h5>
+                        {% for assumption in psychic.assumptions %}
+                            <p>
+                                {{ assumption }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    Нет догадок у -> {{ psychic.name }}<br/>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div style="margin: 40px 0 0 0">
+            <h3>
+                История введенных пользователем чисел:
+            </h3>
+            {% if numbers %}
+                {% for number in numbers %}
+                    <p>{{ number }}</p>
+                {% endfor %}
+            {% else %}
+                Пока нет введенных цифр пользователем
+            {% endif %}
+        </div>
+
+        <div style="margin: 40px 0 0 0">
+            <h3>
+                Текущее значение достоверности по каждому экстрасенсу:
+            </h3>
+            {% for psychic in psychics %}
+                <p>
+                    Имя: {{ psychic.name }} ->
+                    Догадка: {{ psychic.index_effectivity }}
+                </p>
+            {% endfor %}
         </div>
     </div>
 </body>
