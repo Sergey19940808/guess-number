@@ -6,25 +6,47 @@
 </head>
 <body>
     <div style="display: flex; align-items: start; justify-content: center; flex-direction: column; margin: 0 0 0 500px">
-        <div style="margin: 100px 0 0 0">
-            <form method="get" action="{% url 'assessment' %}">
-                <label>
-                    <span style="font-size: 22px">
-                        Введите двухзначное число<br/>
-                    </span>
-                </label>
-                <input type="number" value="0" name="number_user">
-                <button>
-                    Начать отгадывание
-                </button>
-            </form>
-        </div>
+        {% if not is_assessment %}
+            <div style="margin: 100px 0 0 0">
+                <form method="get" action="{% url 'assessment' %}">
+                    <label>
+                        <span style="font-size: 22px">
+                            Введите двухзначное число<br/>
+                        </span>
+                    </label>
+                    <input type="number" value="0" name="number_user">
+                    <button>
+                        Получить догадки
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+        {% if is_assessment %}
+            <div style="margin: 100px 0 0 0">
+                <form method="get" action="{% url 'effectivity' %}">
+                    <button>
+                        Оценить экстрасенсов
+                    </button>
+                </form>
+            </div>
+        {% endif %}
 
-        <div style="margin: 40px 0 0 0">
-            <h3>
-                Догадки экстрасенсов:
-            </h3>
-        </div>
+        {% if is_assessment %}
+            <div style="margin: 40px 0 0 0">
+                <h3>
+                    Загаданное число {{ number }}
+                </h3>
+                <h3>
+                    Догадки экстрасенсов:
+                </h3>
+                {% for assessment in assessments %}
+                    <p>
+                        Имя: {{ assessment.name }} ->
+                        Догадка: {{ assessment.value }}
+                    </p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
         <div style="margin: 40px 0 0 0">
             <h3>
@@ -36,11 +58,13 @@
                         <h5>
                             {{ psychic.name }}
                         </h5>
-                        {% for assumption in psychic.assumptions %}
-                            <p>
-                                {{ assumption }}
-                            </p>
-                        {% endfor %}
+                        <div style="display: flex">
+                            {% for assumption in psychic.assumptions %}
+                                <p style="padding-right: 10px">
+                                    {{ assumption }}
+                                </p>
+                            {% endfor %}
+                        </div>
                     </div>
                 {% else %}
                     Нет догадок у -> {{ psychic.name }}<br/>
@@ -53,9 +77,13 @@
                 История введенных пользователем чисел:
             </h3>
             {% if numbers %}
-                {% for number in numbers %}
-                    <p>{{ number }}</p>
-                {% endfor %}
+                <div style="display: flex">
+                    {% for number in numbers %}
+                        <p style="padding-right: 10px">
+                            {{ number }}
+                        </p>
+                    {% endfor %}
+                </div>
             {% else %}
                 Пока нет введенных цифр пользователем
             {% endif %}

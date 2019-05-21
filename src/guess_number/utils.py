@@ -4,6 +4,8 @@ from random import randint
 __all__ = [
     'build_context',
     'assessmented_psychics',
+    'get_macaddress',
+    'update_assumptions',
 ]
 
 USER = {
@@ -25,7 +27,7 @@ def _create_or_get_user(store):
     :param store: объект для работы с хранилищем данных
     :return:
     """
-    mac = get_mac()
+    mac = get_macaddress()
     if store.get(mac):
         return store.get(mac)
     else:
@@ -50,7 +52,19 @@ def assessmented_psychics(psychics, number):
     :param number: введенное число пользователем
     :return:
     """
-    assessments = []
-    for psychic in psychics:
-        assessments.append({'id': psychic['id'], 'assessment': randint(int(number) - 5, int(number) + 5)})
+    assessments = {
+        psychic['id']: {'value': randint(int(number) - 5, int(number) + 5), 'name': psychic['name']}
+        for psychic in psychics
+    }
     return assessments
+
+
+def get_macaddress():
+    return get_mac()
+
+
+def update_assumptions(psychics, assessments):
+    for psychic in psychics:
+        psychic['assumptions'].append(assessments.get(psychic['id'])['value'])
+    return psychics
+

@@ -2,27 +2,57 @@ from django.views.generic import View
 from django.shortcuts import render, redirect
 
 from store.store import Store
-from guess_number.utils import build_context, assessmented_psychics
+from guess_number.utils import (
+    build_context,
+    assessmented_psychics,
+    get_macaddress,
+    update_assumptions
+)
 
 __all__ = [
     'MainView',
     'AssessmentPsychicsView',
+    'EffectivityView',
 ]
 
 
 class BaseView(View):
     template_name = 'guess_number/main.html'
     store = Store()
-    context = build_context(store)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.context = build_context(self.store)
+        self.mac = get_macaddress()
+        self.user = self.store.get(self.mac)
 
 
 class MainView(BaseView):
     def get(self, request, *args, **kwargs):
-        return render(request, 'guess_number/main.html', self.context)
+        context = build_context(self.store)
+        return render(request, 'guess_number/main.html', context)
 
 
 class AssessmentPsychicsView(BaseView):
     def get(self, request, *args, **kwargs):
-        assessment_psychics = assessmented_psychics(self.context['psychics'], request.GET.get('number_user'))
-        self.store.set('history_numbers', self.store.get('history_numbers').append())
+        number = request.GET.get('number_user')
+        assessment_psychics = assessmented_psychics(self.context['psychics'], number)
+
+        self.user['numbers'].append(number)
+        self.user['psychics'] = update_assumptions(self.user['psychics'], assessment_psychics)
+        self.user['is_assessment'] = True
+        self.user['assessments'] = [assessment for assessment in assessment_psychics.values()]
+        self.user['number'] = number
+        self.store.set(self.mac, self.user)
+        return redirect('main')
+
+
+class EffectivityView(BaseView):
+    def get(self, request, *args, **kwargs):
+        self.user.pop('is_assessment')
+        self.user.pop('assessments')
+        self.user.pop('number')
+
+        self.store.set(self.mac, self.user)
+
         return redirect('main')
