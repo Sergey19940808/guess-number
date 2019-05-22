@@ -6,8 +6,9 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-django = "*"
-django-redis = "*"
+django = "==2.2.1"
+django-redis = "==4.10.0"
+django-dotenv = "==1.4.2"
 
 [requires]
 python_version = "3.6"
