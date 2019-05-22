@@ -1,11 +1,9 @@
-from django.views.generic import View
 from django.shortcuts import render, redirect
 
-from store.store import Store
-from guess_number.utils import (
+from libs.views import *
+from libs.utils import (
     build_context,
     assessmented_psychics,
-    get_macaddress,
     update_assumptions
 )
 
@@ -14,17 +12,6 @@ __all__ = [
     'AssessmentPsychicsView',
     'EffectivityView',
 ]
-
-
-class BaseView(View):
-    template_name = 'guess_number/main.html'
-    store = Store()
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.context = build_context(self.store)
-        self.mac = get_macaddress()
-        self.user = self.store.get(self.mac)
 
 
 class MainView(BaseView):
@@ -52,6 +39,8 @@ class EffectivityView(BaseView):
         self.user.pop('is_assessment')
         self.user.pop('assessments')
         self.user.pop('number')
+
+
 
         self.store.set(self.mac, self.user)
 
