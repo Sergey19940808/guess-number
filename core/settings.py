@@ -17,7 +17,7 @@ import dotenv
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
-dotenv.read_dotenv(dotenv=os.path.join(ROOT_DIR, '.env'), override=True)
+dotenv.read_dotenv(dotenv=os.path.join(ROOT_DIR, 'guess-number/.env'), override=True)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
