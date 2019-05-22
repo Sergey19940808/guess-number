@@ -24,7 +24,7 @@ SECRET_KEY = 'l(9_dt&u6tt6c45#bpvsnswz%cc3*h@s-^6jk0!s6wp+b9nv0q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://fathomless-dawn-44509.herokuapp.com/']
+ALLOWED_HOSTS = ['fathomless-dawn-44509.herokuapp.com']
 
 
 # Application definition
