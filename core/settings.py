@@ -75,7 +75,7 @@ CACHES = {
     'default': {
         'TIMEOUT': 15*60,
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://redistogo:aeb33069d500952d974d3c42136f0488@hammerjaw.redistogo.com:9344/1',
+        'LOCATION': 'redis://redistogo:aeb33069d500952d974d3c42136f0488@hammerjaw.redistogo.com:9344/',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient'
         }
