@@ -6,6 +6,7 @@ __all__ = [
     'assessmented_psychics',
     'get_macaddress',
     'update_assumptions',
+    'update_index_effectivity',
 ]
 
 USER = {
@@ -53,18 +54,46 @@ def assessmented_psychics(psychics, number):
     :return:
     """
     assessments = {
-        psychic['id']: {'value': randint(int(number) - 5, int(number) + 5), 'name': psychic['name']}
+        psychic['id']: {
+            'id': psychic['id'],
+            'value': randint(int(number) - 3, int(number) + 3),
+            'name': psychic['name']
+        }
         for psychic in psychics
     }
     return assessments
 
 
 def get_macaddress():
+    """
+    Метод для получения мак адреса
+    :return:
+    """
     return get_mac()
 
 
 def update_assumptions(psychics, assessments):
+    """
+    Метод для обновления догадок экстрасенсов
+    :param psychics: список экстрасенсов
+    :param assessments: список словарей догадок
+    :return:
+    """
     for psychic in psychics:
         psychic['assumptions'].append(assessments.get(psychic['id'])['value'])
     return psychics
+
+
+def update_index_effectivity(user):
+    """
+    Метод для обновления индекса эффективности экстрасенсов
+    :param user:
+    :return:
+    """
+    for psychic in user['psychics']:
+        if int(user['number']) == user['assessments_map'][psychic['id']]['value']:
+            psychic['index_effectivity'] += 1
+        else:
+            psychic['index_effectivity'] -= 1
+
 

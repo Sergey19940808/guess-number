@@ -4,7 +4,8 @@ from libs.views import *
 from libs.utils import (
     build_context,
     assessmented_psychics,
-    update_assumptions
+    update_assumptions,
+    update_index_effectivity,
 )
 
 __all__ = [
@@ -28,6 +29,7 @@ class AssessmentPsychicsView(BaseView):
         self.user['numbers'].append(number)
         self.user['psychics'] = update_assumptions(self.user['psychics'], assessment_psychics)
         self.user['is_assessment'] = True
+        self.user['assessments_map'] = assessment_psychics
         self.user['assessments'] = [assessment for assessment in assessment_psychics.values()]
         self.user['number'] = number
         self.store.set(self.mac, self.user)
@@ -36,11 +38,12 @@ class AssessmentPsychicsView(BaseView):
 
 class EffectivityView(BaseView):
     def get(self, request, *args, **kwargs):
-        self.user.pop('is_assessment')
+        update_index_effectivity(self.user)
+
         self.user.pop('assessments')
+        self.user.pop('assessments_map')
+        self.user.pop('is_assessment')
         self.user.pop('number')
-
-
 
         self.store.set(self.mac, self.user)
 
