@@ -1,12 +1,7 @@
 from django.shortcuts import render, redirect
 
 from libs.views import *
-from libs.utils import (
-    build_context,
-    assessmented_psychics,
-    update_assumptions,
-    update_index_effectivity,
-)
+from libs.utils import *
 
 __all__ = [
     'MainView',
