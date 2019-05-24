@@ -52,17 +52,16 @@ class BaseView(View):
         return get_mac()
 
     @staticmethod
-    def assessmented_psychics(psychics, number):
+    def assessmented_psychics(psychics):
         """
         Метод для формирования оценки экстрасенсов
         :param psychics: список экстрасенсов
-        :param number: введенное число пользователем
         :return:
         """
         assessments = {
             psychic['id']: {
                 'id': psychic['id'],
-                'value': randint(int(number) - 3, int(number) + 3),
+                'value': randint(10, 99),
                 'name': psychic['name']
             }
             for psychic in psychics

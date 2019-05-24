@@ -25,21 +25,12 @@ class MainView(BaseView):
 
 class AssessmentPsychicsView(BaseView):
     def get(self, request, *args, **kwargs):
-        form = NumberForm(data=request.GET)
-        if form.errors:
-            self.user.set('form', form)
-            self.sync_store()
-            return redirect('main')
+        assessment_psychics = self.assessmented_psychics(self.user.get('psychics'))
 
-        number = request.GET.get('number')
-        assessment_psychics = self.assessmented_psychics(self.user.get('psychics'), number)
-
-        self.user.set('numbers', self.user.get('numbers').append(number))
-        self.user.set('psychics', self.user.psychic.update_assumptions(assessment_psychics))
         self.user.set('is_assessment', True)
         self.user.set('assessments_map', assessment_psychics)
         self.user.set('assessments', [assessment for assessment in assessment_psychics.values()])
-        self.user.set('number', number)
+        self.user.set('psychics', self.user.psychic.update_assumptions(assessment_psychics))
 
         self.sync_store()
 
@@ -48,12 +39,21 @@ class AssessmentPsychicsView(BaseView):
 
 class EffectivityView(BaseView):
     def get(self, request, *args, **kwargs):
-        self.user.update_index_effectivity()
+        number = request.GET.get('number')
+        form = NumberForm(data=request.GET)
+
+        if form.errors:
+            self.user.set('form', form)
+            self.sync_store()
+            return redirect('main')
+
+        self.user.update_index_effectivity(number)
+
+        self.user.set('numbers', self.user.get('numbers') + [number])
 
         self.user.remove('assessments')
         self.user.remove('assessments_map')
         self.user.remove('is_assessment')
-        self.user.remove('number')
 
         self.sync_store()
 

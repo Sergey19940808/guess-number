@@ -8,16 +8,14 @@
     <div style="display: flex; align-items: start; justify-content: center; flex-direction: column; margin: 0 0 0 500px">
         {% if not is_assessment %}
             <div style="margin: 100px 0 0 0">
-                <p>{{ form.errors.number }}</p>
                 <form method="get" action="{% url 'assessment' %}">
                     <label>
                         <span style="font-size: 22px">
-                            Введите число<br/>
+                            Загадайте число и держите его в уме<br/>
                         </span>
                     </label>
-                    <input type="number" value="0" name="number">
                     <button>
-                        Получить догадки
+                        Получить догадки экстрасенсов
                     </button>
                 </form>
             </div>
@@ -25,6 +23,8 @@
         {% if is_assessment %}
             <div style="margin: 100px 0 0 0">
                 <form method="get" action="{% url 'effectivity' %}">
+                    <p>{{ form.errors.number }}</p>
+                    <input type="number" value="0" name="number">
                     <button>
                         Оценить экстрасенсов
                     </button>
@@ -34,9 +34,6 @@
 
         {% if is_assessment %}
             <div style="margin: 40px 0 0 0">
-                <h3>
-                    Загаданное число {{ number }}
-                </h3>
                 <h3>
                     Догадки экстрасенсов:
                 </h3>
