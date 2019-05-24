@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'l(9_dt&u6tt6c45#bpvsnswz%cc3*h@s-^6jk0!s6wp+b9nv0q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['fathomless-dawn-44509.herokuapp.com']
 
@@ -126,3 +126,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # The URL to use when referring to static files (where they will be served from)
 STATIC_URL = '/static/'
+
+
+try:
+    from core.local_settings import *
+except ImportError as e:
+    pass

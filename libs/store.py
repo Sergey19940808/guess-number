@@ -1,13 +1,13 @@
 from django.core.cache import cache
 
+from libs.mixins import *
+
 __all__ = [
     'Store'
 ]
 
 
-class Store(object):
-    def set(self, key, value):
-        cache.set(key, value)
-
-    def get(self, key):
-        return cache.get(key)
+class Store(StoreMixin):
+    def __init__(self):
+        super().__init__()
+        self.data = cache
