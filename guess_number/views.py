@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 
 from libs.views import *
+from guess_number.forms import *
 
 
 __all__ = [
@@ -12,32 +13,35 @@ __all__ = [
 
 class MainView(BaseView):
     def get(self, request, *args, **kwargs):
-        # if not context.get('redirect') and context.get('error'):
-        #     context.pop('error')
-        # elif self.user.get('redirect') and self.user.get('error'):
-        #     self.user.pop('redirect')
-        #     self.user.pop('error')
-        return render(request, 'guess_number/main.html', self.user.data)
+        context = self.user.data.copy()
+        self.clean_field_form()
+        return render(request, 'guess_number/main.html', context)
+
+    def clean_field_form(self):
+        if self.user.data.get('form'):
+            self.user.data.pop('form')
+            self.sync_store()
 
 
 class AssessmentPsychicsView(BaseView):
     def get(self, request, *args, **kwargs):
-        number = request.GET.get('number_user')
+        form = NumberForm(data=request.GET)
+        if form.errors:
+            self.user.set('form', form)
+            self.sync_store()
+            return redirect('main')
 
-        # self.user['redirect'] = True
-        # if len(str(number)) != 2:
-        #     self.user['error'] = 'Неверное число. Принимаются только двухзначные числа'
-        #     return redirect('main')
+        number = request.GET.get('number')
+        assessment_psychics = self.assessmented_psychics(self.user.get('psychics'), number)
 
-        assessment_psychics = self.assessmented_psychics(self.user.data['psychics'], number)
+        self.user.set('numbers', self.user.get('numbers').append(number))
+        self.user.set('psychics', self.user.psychic.update_assumptions(assessment_psychics))
+        self.user.set('is_assessment', True)
+        self.user.set('assessments_map', assessment_psychics)
+        self.user.set('assessments', [assessment for assessment in assessment_psychics.values()])
+        self.user.set('number', number)
 
-        self.user.data['numbers'].append(number)
-        self.user.data['psychics'] = self.user.psychic.update_assumptions(assessment_psychics)
-        self.user.data['is_assessment'] = True
-        self.user.data['assessments_map'] = assessment_psychics
-        self.user.data['assessments'] = [assessment for assessment in assessment_psychics.values()]
-        self.user.data['number'] = number
-        self.store.set(self.mac, self.user.data)
+        self.sync_store()
 
         return redirect('main')
 
@@ -46,11 +50,11 @@ class EffectivityView(BaseView):
     def get(self, request, *args, **kwargs):
         self.user.update_index_effectivity()
 
-        self.user.data.pop('assessments')
-        self.user.data.pop('assessments_map')
-        self.user.data.pop('is_assessment')
-        self.user.data.pop('number')
+        self.user.remove('assessments')
+        self.user.remove('assessments_map')
+        self.user.remove('is_assessment')
+        self.user.remove('number')
 
-        self.store.set(self.mac, self.user.data)
+        self.sync_store()
 
         return redirect('main')

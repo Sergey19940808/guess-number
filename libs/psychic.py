@@ -17,6 +17,9 @@ class Psychic(StoreMixin):
                 {'id': 2, 'name': 'Petr', 'assumptions': [], 'index_effectivity': 0}
             ]
 
+    def set(self, key, value):
+        self.data[key] = value
+
     def update_assumptions(self, assessments):
         """
         Метод для обновления догадок экстрасенсов

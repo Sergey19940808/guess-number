@@ -68,3 +68,6 @@ class BaseView(View):
             for psychic in psychics
         }
         return assessments
+
+    def sync_store(self):
+        self.store.set(self.mac, self.user.get_data())

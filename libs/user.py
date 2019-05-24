@@ -12,6 +12,7 @@ class User(StoreMixin):
         super().__init__()
         if data:
             psychic = Psychic(data['psychics'])
+            if data['numbers'] is None: data['numbers'] = []
             self.data = data
         else:
             psychic = Psychic([])
@@ -20,6 +21,9 @@ class User(StoreMixin):
                 'numbers': []
             }
         self.psychic = psychic
+
+    def set(self, key, value):
+        self.data[key] = value
 
     def update_index_effectivity(self):
         """
