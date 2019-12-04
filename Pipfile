@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-django = "==2.2.1"
+django = "==2.2.8"
 django-redis = "==4.10.0"
 django-dotenv = "==1.4.2"
 gunicorn = "==19.9.0"
